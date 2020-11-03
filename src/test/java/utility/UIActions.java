@@ -1,7 +1,9 @@
 package utility;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class UIActions {
@@ -12,7 +14,7 @@ public class UIActions {
 
 
     public UIActions() {
-        driver = Browser.getDriver();
+        driver = DriverUtil.getDriver();
         waits = new WebDriverWait(driver, 5);
     }
 
@@ -71,36 +73,80 @@ public class UIActions {
     }
 
     public void doubleClick(By locator) {
-
+        WebElement element = findElement(locator);
+        highlight(element);
+        Actions actions = new Actions(driver);
+        actions.doubleClick(element);
+        actions.perform();
     }
 
     public void rightClick(By locator) {
-
+        WebElement element = findElement(locator);
+        highlight(element);
+        Actions actions = new Actions(driver);
+        actions.contextClick(element);
+        actions.perform();
     }
 
     public void dragAndDrop(By form, By target) {
-
+        WebElement fromElem = findElement(form);
+        highlight(fromElem);
+        WebElement targetElem = findElement(target);
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(fromElem, targetElem);
+        actions.perform();
     }
 
-    public void selectOptionsWithText(By locator, String text) {
-
+    public void selectOptionsWithText(By locator, String optionText) {
+        WebElement element = findElement(locator);
+        highlight(element);
+        Select dropdown = new Select(element);
+        for(WebElement opt : dropdown.getOptions() ) {
+            if(opt.getText().equals(optionText)) {
+                highlight(opt);
+                opt.click();
+                break;
+            }
+        }
     }
 
     public void selectOptionsWithValue(By locator, String value) {
-
+        WebElement element = findElement(locator);
+        highlight(element);
+        Select dropdown = new Select(element);
+        for(WebElement opt : dropdown.getOptions() ){
+            String extractedAttrValue = opt.getAttribute("value");
+            if(extractedAttrValue.equals(value)) {
+                highlight(opt);
+                opt.click();
+                break;
+            }
+        }
     }
+
+    public WebElement moveElementToDisplay(By locator) {
+        WebElement element = findElement(locator);
+        highlight(element);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).perform();
+        return  element;
+    }
+
 
     public void hover(By locator) {
-
+        WebElement element = findElement(locator);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element);
+        actions.perform();
     }
 
-    public WebElement grabAsWebElement(By locator) {
+    public WebElement findElement(By locator) {
         WebElement element = waits.until(ExpectedConditions.visibilityOfElementLocated(locator));
         return element;
     }
 
     public void highlight(By locator) {
-        WebElement element = grabAsWebElement(locator);
+        WebElement element = findElement(locator);
         JavascriptExecutor js = (JavascriptExecutor)driver;
         String script = "arguments[0].setAttribute('style','border: 4px solid purple;');";
         js.executeScript(script, element);

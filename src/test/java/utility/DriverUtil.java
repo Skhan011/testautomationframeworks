@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class Browser {
+public class DriverUtil {
 
     // Global variable
     private static WebDriver driver;
@@ -23,8 +23,6 @@ public class Browser {
         else {
             driver.manage().deleteAllCookies();
         }
-
-       // driver.manage().window().maximize();
     }
 
     public static void open(String browserType) {
