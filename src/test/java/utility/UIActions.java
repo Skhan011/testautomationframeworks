@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -72,6 +74,20 @@ public class UIActions {
         }
     }
 
+    public void click(String text) {
+        By locator = xpath("//*[text()='" + text +"']");
+        List<WebElement> allElems = findAllElements(locator);
+        if(allElems.size() > 0) {
+          for(WebElement element : allElems) {
+              if(element.getText().equalsIgnoreCase(text)){
+                  highlight(element);
+                  element.click();
+                  break;
+              }
+          }
+        }
+    }
+
     public void doubleClick(By locator) {
         WebElement element = findElement(locator);
         highlight(element);
@@ -132,6 +148,12 @@ public class UIActions {
         return  element;
     }
 
+    public WebElement moveElementToDisplay(WebElement element) {
+        highlight(element);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).perform();
+        return  element;
+    }
 
     public void hover(By locator) {
         WebElement element = findElement(locator);
@@ -251,6 +273,40 @@ public class UIActions {
     //endregion
 
 
+    //region MULTIPLE ELEMENT RELATED METHODS
+    public List<WebElement> findAllElements(By locator) {
+        return waits.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+
+    public boolean clickNthElementWithText(By locator, String text) {
+        List<WebElement> allElems = waits.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        for(WebElement element : allElems) {
+            if(element.getText().equals(text)) {
+                moveElementToDisplay(element);
+                highlight(element);
+                element.click();
+                return true;
+            }
+        }
+        // if code execution reaches here
+        return false;
+    }
+
+    public List<String> getAllTexts(By locator) {
+        List<WebElement> allElems = waits.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        List<String> allTexts = new ArrayList<>();  // empty list of string with size 0
+
+        if(allElems.size() > 0) {
+            for(WebElement element : allElems) {
+                String currentText = element.getText();
+                allTexts.add(currentText);
+            }
+        }
+        return  allTexts;
+    }
+    //endregion
+
+
     //region TIME & WAITS RELATED METHODS
     public void waitFor(int second) {
         try {
@@ -279,7 +335,52 @@ public class UIActions {
     public void waitUntilElementIsInvisible(By locator) {
         waits.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
+    //endregion
 
+
+    //region ELEMENT LOCATING STRATEGY
+    public By css(String expression) {
+        return By.cssSelector(expression);
+    }
+
+    public By xpath(String expression) {
+        return By.xpath(expression);
+    }
+
+    public By id(String value) {
+        return By.id(value);
+    }
+
+    public By name(String value) {
+        return By.name(value);
+    }
+
+    public By classAttr(String value) {
+        return By.className(value);
+    }
+
+    public By link(String text) {
+        return By.linkText(text);
+    }
+
+    public By linkContains(String text) {
+        return By.partialLinkText(text);
+    }
+
+    public By tag(String tagname) {
+        return By.tagName(tagname);
+    }
     //endregion
 
 }
+
+
+
+
+
+
+
+
+
+
+
