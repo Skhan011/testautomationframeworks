@@ -13,6 +13,7 @@ public class WelcomePage extends UIActions {
     private final By annotate_button = css("button#btnAnnotate");
     private final By create_button = css("button#btnCreate");
     private final By run_button = css("button#btnRun");
+    private final By evaluate_button = css("button#btnRunAndEvaluate");
 
 
     // Actions that user carries out
@@ -33,6 +34,12 @@ public class WelcomePage extends UIActions {
         moveElementToDisplay(run_button);
         click(run_button);
 
+    }
+
+    public void clickEvaluateButton(){
+        moveElementToDisplay(evaluate_button);
+        waitFor(5);
+        click(evaluate_button);
     }
 }
 

@@ -1,17 +1,14 @@
 package testcases;
 
 import commons.BaseTest;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import pages.AnnotatePage;
+import pages.EvaluatePage;
 import pages.RunPage;
 import pages.WelcomePage;
-import utility.DriverUtil;
-import utility.UIActions;
+
 
 public class SmokeTest extends BaseTest {
 
@@ -58,7 +55,7 @@ public class SmokeTest extends BaseTest {
         result = false;
         Assert.assertTrue(result);
     }
-    // Pneumonia
+
 
     @Test
     public void verifyPneumoniaRunInferenceFails() {
@@ -75,5 +72,26 @@ public class SmokeTest extends BaseTest {
         boolean result = runPage.failedTextDisplayed();
 
         Assert.assertTrue(result);
+    }
+
+    @Test
+    public void verifyEvalationPage() {
+        WelcomePage welcomePage = new WelcomePage();
+        EvaluatePage evaluatePage = new EvaluatePage();
+
+        welcomePage.openAilab();
+        welcomePage.clickEvaluateButton();
+
+        evaluatePage.selectUseCase("Breast Density");
+        evaluatePage.selectDataset("Site A - Breast Density Dataset");
+        evaluatePage.selectModels();
+        evaluatePage.clickEvaluateButton();
+        boolean result1 = evaluatePage.verifyFirstResultText();
+        boolean result2 = evaluatePage.verifySecondResultText();
+
+        SoftAssert asserts = new SoftAssert();
+        asserts.assertTrue(result1);
+        asserts.assertTrue(result2);
+        asserts.assertAll();
     }
 }
