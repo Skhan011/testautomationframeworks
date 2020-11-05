@@ -3,8 +3,11 @@ package utility;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.util.logging.Level;
 
 public class DriverUtil {
 
@@ -23,6 +26,7 @@ public class DriverUtil {
         else {
             driver.manage().deleteAllCookies();
         }
+        driver.manage().window().maximize();
     }
 
     public static void open(String browserType) {
@@ -47,9 +51,9 @@ public class DriverUtil {
     }
 
     public static void quit() {
-        if(driver != null) {
-            driver.quit();
-        }
+        driver.close();  // open window closed
+        driver.quit();   // kill the driver process <-- time
+        driver = null;
     }
 }
 

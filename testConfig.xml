@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="AILAB Tests ">
-
-
     
+    <listeners>
+        <listener class-name="utility.TestExecutionDetection"/>
+    </listeners>
+
+
+
+    <test name="Demo">
+        <classes>
+            <class name="testcases.ShowCaseTest"/>
+        </classes>
+    </test>
+
     <test name="Smoke">
         <classes>
-            <class name="testcases.UiActionsTest"/>
-        </classes>
-    </test>
-    
-    <test name="Regression">
-        <classes>
-            <class name="testcases.UiActionsTest"/>
-        </classes>
-    </test>
-
-    <test name="E2E">
-        <classes>
-            <class name="testcases.UiActionsTest"/>
+            <class name="testcases.SmokeTest"/>
         </classes>
     </test>
 
